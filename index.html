@@ -4,23 +4,33 @@
   <title>Expense Tracker</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <h1>💰 Expense Tracker</h1>
 
 <input type="text" id="desc" placeholder="Description">
 <input type="number" id="amount" placeholder="Amount">
+
+<!-- NEW: dropdown -->
+<select id="type">
+  <option value="income">Income</option>
+  <option value="expense">Expense</option>
+</select>
+
 <button onclick="addTransaction()">Add</button>
+
+<br><br>
+
 <button onclick="showBalance()">Show Balance</button>
 
 <h2 id="balanceBox" style="display:none;">
   Balance: ₹<span id="balance">0</span>
 </h2>
 
-<h2>Balance: ₹<span id="balance">0</span></h2>
-
 <ul id="list"></ul>
 
 <script src="script.js"></script>
+
 </body>
 </html>
