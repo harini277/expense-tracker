@@ -2,12 +2,19 @@ let transactions = JSON.parse(localStorage.getItem("data")) || [];
 
 function addTransaction() {
   const desc = document.getElementById("desc").value;
-  const amount = Number(document.getElementById("amount").value);
+  let amount = Number(document.getElementById("amount").value);
+  const type = document.getElementById("type").value;
 
   if (!desc || !amount) return;
 
-  const transaction = { desc, amount };
-  transactions.push(transaction);
+  // Fix logic
+  if (type === "expense") {
+    amount = -Math.abs(amount);
+  } else {
+    amount = Math.abs(amount);
+  }
+
+  transactions.push({ desc, amount });
 
   localStorage.setItem("data", JSON.stringify(transactions));
 
@@ -27,16 +34,10 @@ function updateUI() {
 
     const li = document.createElement("li");
 
-    // Color based on income/expense
-    if (t.amount > 0) {
-      li.style.color = "lightgreen";
-    } else {
-      li.style.color = "red";
-    }
+    li.innerText = `${t.desc}: ₹${Math.abs(t.amount)}`;
 
-    li.innerText = `${t.desc}: ₹${t.amount}`;
+    li.style.color = t.amount > 0 ? "lightgreen" : "red";
 
-    // Delete button
     const btn = document.createElement("button");
     btn.innerText = "❌";
     btn.onclick = () => {
@@ -52,10 +53,8 @@ function updateUI() {
   balance.innerText = total;
 }
 
-// Show balance on button click
 function showBalance() {
   document.getElementById("balanceBox").style.display = "block";
 }
 
-// Initial load
 updateUI();
