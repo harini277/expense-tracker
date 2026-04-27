@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Expense Tracker</title>
   <link rel="stylesheet" href="style.css">
@@ -11,8 +12,8 @@
 
 <input type="text" id="desc" placeholder="Description">
 <input type="number" id="amount" placeholder="Amount">
+<input type="date" id="date">
 
-<!-- NEW: dropdown -->
 <select id="type">
   <option value="income">Income</option>
   <option value="expense">Expense</option>
@@ -22,10 +23,10 @@
 
 <br><br>
 
-<button onclick="showBalance()">Show Balance</button>
+<button onclick="showBalance()">Show Overall Balance</button>
 
 <h2 id="balanceBox" style="display:none;">
-  Balance: ₹<span id="balance">0</span>
+  Overall Balance: ₹<span id="balance">0</span>
 </h2>
 
 <ul id="list"></ul>

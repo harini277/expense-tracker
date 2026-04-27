@@ -13,10 +13,19 @@ input, button, select {
   border: none;
 }
 
+button {
+  cursor: pointer;
+}
+
 li {
   list-style: none;
   margin: 10px;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
+}
+
+h3 {
+  margin-top: 20px;
 }
