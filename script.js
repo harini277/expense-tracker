@@ -7,15 +7,11 @@ function addTransaction() {
   const date = document.getElementById("date").value;
 
   if (!desc || !amount || !date) {
-    alert("Please fill all fields");
+    alert("Fill all fields");
     return;
   }
 
-  if (type === "expense") {
-    amount = -Math.abs(amount);
-  } else {
-    amount = Math.abs(amount);
-  }
+  amount = type === "expense" ? -Math.abs(amount) : Math.abs(amount);
 
   transactions.push({ desc, amount, date });
 
@@ -25,28 +21,30 @@ function addTransaction() {
 }
 
 function updateUI() {
-  const list = document.getElementById("list");
+  const container = document.getElementById("list");
   const balance = document.getElementById("balance");
 
-  list.innerHTML = "";
+  container.innerHTML = "";
 
   let totalBalance = 0;
 
-  // Group transactions by date
+  // Group by date
   const grouped = {};
 
   transactions.forEach(t => {
-    if (!grouped[t.date]) {
-      grouped[t.date] = [];
-    }
+    if (!grouped[t.date]) grouped[t.date] = [];
     grouped[t.date].push(t);
   });
 
-  // Loop through each date
   for (let date in grouped) {
-    const dateHeader = document.createElement("h3");
-    dateHeader.innerText = `📅 ${date}`;
-    list.appendChild(dateHeader);
+    const section = document.createElement("div");
+    section.className = "date-section";
+
+    const title = document.createElement("h3");
+    title.innerText = `📅 ${date}`;
+    section.appendChild(title);
+
+    const table = document.createElement("table");
 
     let dailyTotal = 0;
 
@@ -54,11 +52,22 @@ function updateUI() {
       dailyTotal += t.amount;
       totalBalance += t.amount;
 
-      const li = document.createElement("li");
+      const row = document.createElement("tr");
 
-      li.innerText = `${t.desc}: ₹${Math.abs(t.amount)}`;
-      li.style.color = t.amount > 0 ? "lightgreen" : "red";
+      const desc = document.createElement("td");
+      desc.innerText = t.desc;
 
+      const amt = document.createElement("td");
+
+      if (t.amount > 0) {
+        amt.innerText = `+ ₹${t.amount}`;
+        amt.className = "income";
+      } else {
+        amt.innerText = `- ₹${Math.abs(t.amount)}`;
+        amt.className = "expense";
+      }
+
+      const del = document.createElement("td");
       const btn = document.createElement("button");
       btn.innerText = "❌";
       btn.onclick = () => {
@@ -68,20 +77,35 @@ function updateUI() {
         updateUI();
       };
 
-      li.appendChild(btn);
-      list.appendChild(li);
+      del.appendChild(btn);
+
+      row.appendChild(desc);
+      row.appendChild(amt);
+      row.appendChild(del);
+
+      table.appendChild(row);
     });
 
-    // Daily total
-    const daily = document.createElement("p");
-    daily.innerText = `Daily Total: ₹${dailyTotal}`;
-    list.appendChild(daily);
+    section.appendChild(table);
+
+    const daily = document.createElement("div");
+
+    if (dailyTotal >= 0) {
+      daily.innerText = `Daily Total: + ₹${dailyTotal}`;
+      daily.className = "daily-total income";
+    } else {
+      daily.innerText = `Daily Total: - ₹${Math.abs(dailyTotal)}`;
+      daily.className = "daily-total expense";
+    }
+
+    section.appendChild(daily);
+
+    container.appendChild(section);
   }
 
   balance.innerText = totalBalance;
 }
 
-// Show overall balance
 function showBalance() {
   document.getElementById("balanceBox").style.display = "block";
 }
