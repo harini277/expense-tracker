@@ -109,5 +109,8 @@ function updateUI() {
 function showBalance() {
   document.getElementById("balanceBox").style.display = "block";
 }
-
+function logout() {
+  localStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
+}
 updateUI();
